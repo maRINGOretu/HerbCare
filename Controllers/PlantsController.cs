@@ -35,6 +35,11 @@ public class PlantsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(string id, Plant plant)
     {
+        var existing = await _plants.GetByIdAsync(id);
+        if (existing is null) return NotFound();
+
+        plant.Id = id;           // ← перезаписуємо Id з URL
+        plant.CreatedAt = existing.CreatedAt; // ← зберігаємо дату створення
         await _plants.UpdateAsync(id, plant);
         return NoContent();
     }

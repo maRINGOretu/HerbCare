@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+﻿using hcAPI.DTOs;
 using hcAPI.Interfaces;
 using hcAPI.Models;
-using hcAPI.DTOs;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
+using System.Security.Claims;
 
 namespace hcAPI.Controllers;
 
@@ -42,6 +43,8 @@ public class GardenController : ControllerBase
 
             var userPlant = new UserPlant
             {
+                Id = ObjectId.GenerateNewId().ToString(),
+
                 Name = plant.Name,
                 Icon = plant.Icon,
                 Description = plant.Description,

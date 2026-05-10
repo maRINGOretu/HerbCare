@@ -56,7 +56,12 @@ public class UserService : IUserService
         var existing = user.Notes.FirstOrDefault(n => n.Id == noteId);
         if (existing == null) return;
 
+        existing.Title = note.Title;
         existing.Content = note.Content;
+        existing.NoteColor = note.NoteColor;
+        existing.LinkedPlantName = note.LinkedPlantName;
+        existing.UserPlantId = note.UserPlantId;
+        existing.Icon = note.Icon;
         existing.UpdatedAt = DateTime.UtcNow;
 
         await UpdateAsync(userId, user);

@@ -33,24 +33,34 @@ public class GardenController : ControllerBase
     [HttpPost("{plantId}")]
     public async Task<IActionResult> AddPlant(string plantId, [FromQuery] int quantity = 1)
     {
-        var plant = await _plants.GetByIdAsync(plantId);
-        if (plant is null) return NotFound("Рослину не знайдено");
-
-        var userPlant = new UserPlant
+        try
         {
-            Name = plant.Name,
-            Icon = plant.Icon,
-            Description = plant.Description,
-            MedicinalProperties = plant.MedicinalProperties,
-            WateringDays = plant.WateringDays,
-            FertilizerType = plant.FertilizerType,
-            Category = plant.Category,
-            ImageUrl = plant.ImageUrl,
-            Quantity = quantity
-        };
+            var plant = await _plants.GetByIdAsync(plantId);
 
-        await _users.AddToGardenAsync(UserId, userPlant);
-        return Ok(userPlant);
+            if (plant is null)
+                return NotFound("Рослину не знайдено");
+
+            var userPlant = new UserPlant
+            {
+                Name = plant.Name,
+                Icon = plant.Icon,
+                Description = plant.Description,
+                MedicinalProperties = plant.MedicinalProperties,
+                WateringDays = plant.WateringDays,
+                FertilizerType = plant.FertilizerType,
+                Category = plant.Category,
+                ImageUrl = plant.ImageUrl,
+                Quantity = quantity
+            };
+
+            await _users.AddToGardenAsync(UserId, userPlant);
+
+            return Ok(userPlant);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.ToString());
+        }
     }
 
     [HttpDelete("{userPlantId}")]
